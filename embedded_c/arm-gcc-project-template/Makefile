@@ -38,8 +38,8 @@ BUILD_DIR = build
 C_SOURCES =  \
 app/main.c \
 base/os/freertos.c \
-base/stm32f1xx_it.c \
-base/stm32f1xx_hal_msp.c \
+app/stm32f1xx_it.c \
+base/chip/stm32f1xx_hal_msp.c \
 base/chip/stm32f1xx_hal_timebase_tim.c \
 base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
 base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
@@ -54,7 +54,7 @@ base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c \
 base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
 base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
-base/system_stm32f1xx.c \
+base/chip/system_stm32f1xx.c \
 base/os/FreeRTOS/Source/croutine.c \
 base/os/FreeRTOS/Source/event_groups.c \
 base/os/FreeRTOS/Source/list.c \
