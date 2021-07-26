@@ -1,13 +1,10 @@
-from setuptools import setup, find_packages
-
+import setuptools   
 APP_VERSION = '0.1'
 
-setup(
+setuptools.setup(
         name = 'Python Starter',
         version = '0.1',
-        packages = find_packages(),
-        include_package_data = True,
-        py_modules=['pythonstarter'],
+        packages=['pythonstarter'],
         install_requires=[
             'Click',
             ],

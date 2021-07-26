@@ -11,6 +11,7 @@
 
 # module imports
 import click
+from . import helper
 
 # program info
 APP_NAME = "Python Starter"
@@ -28,5 +29,5 @@ def main(
         verbose
         ):
 
-    if (verbose):
-        click.echo("Successfully ran our imported function! (with edits)")
+    click.echo("Successfully ran our imported function! (with edits)")
+    module2.idModule()
