@@ -72,7 +72,7 @@ are included.
 ## Create an Executable
 
 When you are happy with your program, you may want to convert it to a Python-independent
-executable that can be deplayoyed on any target device for general use. This is accomplished
+executable that can be deployed on any target device for general use. This is accomplished
 using Pyinstaller and the accompanying main.spec script, which contains a special
 Pyinstaller Recipe from their GitHub page that is designed to package projects make
 with setuptools. Simply run ```pyinstaller --onefile path/to/main.spec``` from the

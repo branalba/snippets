@@ -30,4 +30,4 @@ def main(
         verbose
 ):
 
-    click.echo("Successfully ran our imported function! (with edits)")
+    click.echo("Successfully ran our binary!")

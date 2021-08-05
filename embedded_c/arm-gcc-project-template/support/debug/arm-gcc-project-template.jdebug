@@ -5,7 +5,7 @@
 **********************************************************************
 
 File          : /home/branalba/Nextcloud/project_files/snippets/embedded_c/arm-gcc-project-template/support/debug/arm-gcc-project-template.jdebug
-Created       : 25 Aug 2021 17:42
+Created       : 26 Aug 2021 20:51
 Ozone Version : V3.24b
 */
 
@@ -25,14 +25,14 @@ void OnProjectLoad (void) {
   Project.AddPathSubstitute ("/home/branalba/Nextcloud/project_files/snippets/embedded_c/arm-gcc-project-template/support/debug", "$(ProjectDir)");
   Project.AddPathSubstitute ("/home/branalba/nextcloud/project_files/snippets/embedded_c/arm-gcc-project-template/support/debug", "$(ProjectDir)");
   Project.SetDevice ("STM32F103C8");
-  Project.SetHostIF ("USB", "");
+  Project.SetHostIF ("USB", "261010523");
   Project.SetTargetIF ("JTAG");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M3.svd");
   //
   // User settings
   //
-  File.Open ("/home/branalba/Nextcloud/project_files/snippets/embedded_c/arm-gcc-project-template/build/quadcopter_firmware.elf");
+  File.Open ("/home/branalba/Nextcloud/project_files/snippets/embedded_c/arm-gcc-project-template/build/arm-gcc-project-template.elf");
   Project.SetOSPlugin ("FreeRTOSPlugin");
 }
 

@@ -5,7 +5,7 @@ BEEN 100% IMPLEMENTED. Specifically, the Makefile (s) need work.
 
 This project is designed to be used as a template to create any
 embedded C application targeting ARM chips. The project is by default
-set up to upload a generic blink script based on FreeRTOS to a "blue pill"
+set up to upload a generic blink script based on FreeRTOS to a blue pill
 STM32F103C8T6 development board, but can be reconfigured to use any ARM-based
 processor compiled with arm-none-eabi-. To modify:
 
