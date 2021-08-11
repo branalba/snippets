@@ -68,7 +68,7 @@ void App_Task_Blink ( void *argument )
     /* infinite loop */
     while ( 1 )
     {
-        osDelay ( 500 );
+        osDelay ( 250 );
         HAL_GPIO_TogglePin ( GPIOC, GPIO_PIN_13 );
     }
 }

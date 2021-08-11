@@ -1,7 +1,9 @@
 # ARM GCC PROJECT TEMPLATE
 
 THIS PROJECT IS A WORK IN PROGRESS; NOT ALL ITEMS IN THE FOLLOWING README HAVE
-BEEN 100% IMPLEMENTED. Specifically, the Makefile (s) need work.
+BEEN 100% IMPLEMENTED. Specifically, the project is no longer using a Makefile
+build system in favor of `ninja`, whose configuration script is still a work in
+progress.
 
 This project is designed to be used as a template to create any
 embedded C application targeting ARM chips. The project is by default
@@ -9,8 +11,8 @@ set up to upload a generic blink script based on FreeRTOS to a blue pill
 STM32F103C8T6 development board, but can be reconfigured to use any ARM-based
 processor compiled with arm-none-eabi-. To modify:
 
-- Edit the Makefile, instructions on what to modify/how should be indicated in
-    the file itself.
+- Edit configure.py, instructions on what to modify/how should be indicated in
+    the file itself. Then run `python configure.py` followed by `ninja` to build.
 - Edit the base/chip and base/os directories to use your RTOS/HAL
 - Implement your own modules in the lib/ directory, i.e. lib/mymodule
     which may contain a mymodule.c, mymodule.h and possibly a README.
