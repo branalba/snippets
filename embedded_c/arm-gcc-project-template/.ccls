@@ -1,2 +1,14 @@
-%compile_commands.json
 -I/usr/arm-none-eabi/include
+-Iarm-gcc-project/app
+-Iarm-gcc-project/base/chip/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
+-Iarm-gcc-project/base/chip/Drivers/STM32F1xx_HAL_Driver/Inc
+-Iarm-gcc-project/base/os/FreeRTOS/Source/include
+-Iarm-gcc-project/base/os/FreeRTOS/Source/CMSIS_RTOS_V2
+-Iarm-gcc-project/base/os/FreeRTOS/Source/portable/GCC/ARM_CM3
+-Iarm-gcc-project/base
+-Iarm-gcc-project/base/chip
+-Iarm-gcc-project/base/os
+-Iarm-gcc-project/base/debug/RTT
+-Iarm-gcc-project/app/tasks
+-Iarm-gcc-project/base/chip/Drivers/CMSIS/Device/ST/STM32F1xx/Include
+-Iarm-gcc-project/base/chip/Drivers/CMSIS/Include

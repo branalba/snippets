@@ -34,6 +34,8 @@
 /* PRIVATE INCLUDES                                                           */
 /* ========================================================================== */
 
+/* system */
+
 /* user-defined */
 #include "main.h"
 #include "task_blink.h"
@@ -100,7 +102,7 @@ void App_RTOS_Init ( void )
 
     /* creating the tasks */
     App_Task_Blink_Init();
-
+    
     /* start the RTOS */
     osKernelStart();
 }

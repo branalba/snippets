@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import os
-
 ###############################################################################
 # class definitions
 ###############################################################################
@@ -20,7 +18,7 @@ class STM32F103 ():
     MCU_FLAGS = '-mcpu=cortex-m3 -mthumb'
     C_DEFS = '-DUSE_HAL_DRIVER -DSTM32F103x6'
     CFLAGS = '-Wall -fdata-sections -ffunction-sections -Og -gdwarf-2'
-    LDFLAGS = '-lc'
+    LDFLAGS = '-lc -lnosys -specs=nano.specs -Wl,-Map=$build_dir/$target.map,--cref -Wl,--gc-sections'
     CC_PREFIX = 'arm-none-eabi-'
     EXEC_EXT = '.elf'
 
@@ -32,7 +30,8 @@ class STM32F103 ():
 def strStich(arr):
     out = ''
     for item in arr:
-        out = out + ' ' + str(item)
+        if item != '':
+            out = out + ' ' + str(item)
     return out[1:]
 
 
@@ -67,121 +66,144 @@ def writeAsmObjBuild(path_to_src):
 ###############################################################################
 
 
+OUTPUT_FILE = 'build.ninja'
+
+# name of the project, also name output executables
+PROJ_NAME = 'arm-gcc-project'
+
+# platform, i.e., the target that the code will run on
 platform = STM32F103()
 
-config_items = dict()
+# the root folder for the project, i.e., the highest-level directory that
+# contains all source code
+PROJ_ROOT = 'arm-gcc-project'
 
-config_items['root'] = 'arm-gcc-project'
-# TODO: automate config_items['root']prefix
-config_items['c_sources'] = [
-    config_items['root'] + '/app/main.c',
-    config_items['root'] + '/base/os/freertos.c',
-    config_items['root'] + '/app/stm32f1xx_it.c',
-    config_items['root'] + '/base/chip/stm32f1xx_hal_msp.c',
-    config_items['root'] + '/base/chip/stm32f1xx_hal_timebase_tim.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c',
-    config_items['root'] + '/base/chip/system_stm32f1xx.c',
-    config_items['root'] + '/base/os/FreeRTOS/Source/croutine.c',
-    config_items['root'] + '/base/os/FreeRTOS/Source/event_groups.c',
-    config_items['root'] + '/base/os/FreeRTOS/Source/list.c',
-    config_items['root'] + '/base/os/FreeRTOS/Source/queue.c',
-    config_items['root'] + '/base/os/FreeRTOS/Source/stream_buffer.c',
-    config_items['root'] + '/base/os/FreeRTOS/Source/tasks.c',
-    config_items['root'] + '/base/os/FreeRTOS/Source/timers.c',
-    config_items['root'] +
-    '/base/os/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c',
-    config_items['root'] +
-    '/base/os/FreeRTOS/Source/portable/MemMang/heap_4.c',
-    config_items['root'] +
-    '/base/os/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c',
-    config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c',
-    config_items['root'] + '/base/base.c',
-    config_items['root'] + '/base/debug/RTT/SEGGER_RTT.c',
-    config_items['root'] + '/base/debug/RTT/SEGGER_RTT_printf.c',
-    config_items['root'] + '/app/tasks/task_blink.c'
+# the directory to generate build outputs
+BUILD_DIR = 'build'
+
+# enter sources and includes as bare paths only with respect to source root
+C_SOURCES = [
+    'app/main.c',
+    'base/os/freertos.c',
+    'app/stm32f1xx_it.c',
+    'base/chip/stm32f1xx_hal_msp.c',
+    'base/chip/stm32f1xx_hal_timebase_tim.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c',
+    'base/chip/system_stm32f1xx.c',
+    'base/os/FreeRTOS/Source/croutine.c',
+    'base/os/FreeRTOS/Source/event_groups.c',
+    'base/os/FreeRTOS/Source/list.c',
+    'base/os/FreeRTOS/Source/queue.c',
+    'base/os/FreeRTOS/Source/stream_buffer.c',
+    'base/os/FreeRTOS/Source/tasks.c',
+    'base/os/FreeRTOS/Source/timers.c',
+    'base/os/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c',
+    'base/os/FreeRTOS/Source/portable/MemMang/heap_4.c',
+    'base/os/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c',
+    'base/base.c',
+    'base/debug/RTT/SEGGER_RTT.c',
+    'base/debug/RTT/SEGGER_RTT_printf.c',
+    'app/tasks/task_blink.c'
 ]
-config_items['asm_sources'] = [
+
+C_INCLUDES = [
+    'app',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy',
+    'base/chip/Drivers/STM32F1xx_HAL_Driver/Inc',
+    'base/os/FreeRTOS/Source/include',
+    'base/os/FreeRTOS/Source/CMSIS_RTOS_V2',
+    'base/os/FreeRTOS/Source/portable/GCC/ARM_CM3',
+    'base',
+    'base/chip',
+    'base/os',
+    'base/debug/RTT',
+    'app/tasks',
+    'base/chip/Drivers/CMSIS/Device/ST/STM32F1xx/Include',
+    'base/chip/Drivers/CMSIS/Include'
+]
+
+# asm sources generally have atypical paths and thus they are not search for
+# with respect to the source root. Use relative path instead
+ASM_SOURCES = [
     'support/build/startup_stm32f103x6.s'
 ]
 
-var_items = dict()
+# linker script
+LINKSCRIPT = 'support/build/STM32F103C6Tx_FLASH.ld'
 
-var_items['build_dir'] = 'build'
-var_items['target'] = 'arm-gcc-project'
-var_items['cflags'] = strStich([
-    platform.CFLAGS,
-    platform.C_DEFS,
-    platform.MCU_FLAGS,
-    '-g'
-])
-var_items['as'] = platform.CC_PREFIX + 'gcc -x assembler-with-cpp'
-var_items['cc'] = platform.CC_PREFIX + 'gcc'
-# TODO: prefix of -I and config_items['root']should be automated
-var_items['c_includes'] = strStich([
-    '-I' + config_items['root'] + '/app',
-    '-I' + config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy',
-    '-I' + config_items['root'] +
-    '/base/chip/Drivers/STM32F1xx_HAL_Driver/Inc',
-    '-I' + config_items['root'] + '/base/os/FreeRTOS/Source/include',
-    '-I' + config_items['root'] + '/base/os/FreeRTOS/Source/CMSIS_RTOS_V2',
-    '-I' + config_items['root'] +
-    '/base/os/FreeRTOS/Source/portable/GCC/ARM_CM3',
-    '-I' + config_items['root'] + '/base',
-    '-I' + config_items['root'] + '/base/chip',
-    '-I' + config_items['root'] + '/base/os',
-    '-I' + config_items['root'] + '/base/debug/RTT',
-    '-I' + config_items['root'] + '/app/tasks',
-    '-I' + config_items['root'] +
-    '/base/chip/Drivers/CMSIS/Device/ST/STM32F1xx/Include',
-    '-I' + config_items['root'] + '/base/chip/Drivers/CMSIS/Include'
-])
-var_items['ldflags'] = strStich([
-    platform.MCU_FLAGS,
-    '-specs=nano.specs',
-    '-T' + './support/build/STM32F103C6Tx_FLASH.ld',
-    '-lc',
-    '-lm',
-    '-lnosys',
-    '-Wl,-Map=' + var_items['build_dir'] + '/' +
-    var_items['target'] + '.map,--cref -Wl,--gc-sections'
-
-])
+###############################################################################
+# begin main application - beyond this point shouldn't be edited
+###############################################################################
 
 
 def main():
+    # create dictionary to manage source file paths
+    source_items = dict()
+
+    # c sources
+    source_items['c_sources'] = [
+        PROJ_ROOT + '/' + raw for raw in C_SOURCES]
+
+    # asm sources
+    source_items['asm_sources'] = ASM_SOURCES
+
+    # create dictionary to manage items that will become variables in build.ninja
+    var_items = dict()
+
+    # compiler and assembler commands, respecively
+    var_items['cc'] = platform.CC_PREFIX + 'gcc'
+    var_items['as'] = platform.CC_PREFIX + 'gcc -x assembler-with-cpp'
+
+    # build directory and project name
+    var_items['build_dir'] = BUILD_DIR
+    var_items['target'] = PROJ_NAME
+
+    # flags
+    var_items['cflags'] = strStich([
+        platform.CFLAGS,
+        platform.C_DEFS,
+        platform.MCU_FLAGS,
+        '-g'
+    ])
+
+    # add a linker script if available
+    if LINKSCRIPT.strip() != '':
+        link_arg = '-T' + LINKSCRIPT
+    else:
+        link_arg = ''
+
+    var_items['ldflags'] = strStich([
+        platform.LDFLAGS,
+        platform.MCU_FLAGS,
+        link_arg
+    ])
+
+    # includes - also used to generate a .ccls file for language server
+    incl_arr = ['-I' + PROJ_ROOT + '/' + raw for raw in C_INCLUDES]
+    var_items['c_includes'] = strStich(incl_arr)
+    with open('.ccls', 'w') as cclsf:
+        if (platform.CC_PREFIX == 'arm-none-eabi-'):
+            cclsf.write('-I/usr/arm-none-eabi/include\n')
+        for path in incl_arr:
+            cclsf.write(path + '\n')
+
     # open build file for writing
-    buildfile = open('build.ninja', 'w')
+    buildfile = open(OUTPUT_FILE, 'w')
 
     # write variables
     buildfile.writelines([writeVar(name, val) + '\n'
@@ -196,16 +218,16 @@ def main():
 
     # --- building object files
     # build C source files
-    for src in config_items['c_sources']:
+    for src in source_items['c_sources']:
         buildfile.write(writeSrcObjBuild(src))
     # build asm files
-    for asm in config_items['asm_sources']:
+    for asm in source_items['asm_sources']:
         buildfile.write(writeAsmObjBuild(asm))
     buildfile.write('\n')
 
     # --- link object files to generate executable
     buildfile.write('build $build_dir/$target' + platform.EXEC_EXT + ': link ' +
-                    strStich(['$build_dir/' + srcToObj(src) for src in config_items['c_sources'] + config_items['asm_sources']]))
+                    strStich(['$build_dir/' + srcToObj(src) for src in source_items['c_sources'] + source_items['asm_sources']]))
     buildfile.write('\n')
 
     # we are done, close the file before exiting
