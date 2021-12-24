@@ -1,0 +1,22 @@
+cc = gcc
+cxx = g++
+as = gcc -x assembler-with-cpp
+build_dir = build
+target = proj-template-gcc-x86
+ccflags = 
+ldflags = 
+cc_includes = -I./ProjTemplate-GCCx86/app
+
+rule cc
+    command = $cc -c $ccflags $cc_includes $in -o $out
+    description = building $out...
+    depfile = $out.d
+    deps = gcc
+
+rule link
+    command = $cc $in $ldflags -o $out
+    description = generating executable...
+
+build $build_dir/obj/main.o: cc ./ProjTemplate-GCCx86/app/main.c
+
+build $build_dir/bin/$target: link $build_dir/obj/main.o

@@ -24,7 +24,7 @@ a visual, terminal-based way to select files during runtime. Inspired by the
 from csv files. Useful for applications that need to process a lot of different
 csv files with varying columns and structure
 
-### Embedded C
+### C/C++
 
 - arm-gcc-project-template
   - An in-the-works template project eventually intended for configuration

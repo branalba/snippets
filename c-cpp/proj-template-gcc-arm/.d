@@ -1,0 +1,37 @@
+build/stm32f1xx_hal_i2c.o: \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
+ proj-template-stm32f103/base/chip/stm32f1xx_hal_conf.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h \
+ proj-template-stm32f103/base/chip/stm32f1xx.h \
+ proj-template-stm32f103/base/chip/stm32f103x6.h \
+ proj-template-stm32f103/base/chip/core_cm3.h \
+ /usr/lib/gcc/arm-none-eabi/11.2.0/include/stdint.h \
+ /usr/arm-none-eabi/include/stdint.h \
+ /usr/arm-none-eabi/include/machine/_default_types.h \
+ /usr/arm-none-eabi/include/sys/features.h \
+ /usr/arm-none-eabi/include/_newlib_version.h \
+ /usr/arm-none-eabi/include/sys/_intsup.h \
+ /usr/arm-none-eabi/include/sys/_stdint.h \
+ proj-template-stm32f103/base/chip/CMSIS/Include/cmsis_version.h \
+ proj-template-stm32f103/base/chip/CMSIS/Include/cmsis_compiler.h \
+ proj-template-stm32f103/base/chip/CMSIS/Include/cmsis_gcc.h \
+ proj-template-stm32f103/base/chip/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
+ /usr/lib/gcc/arm-none-eabi/11.2.0/include/stddef.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_exti.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
+ proj-template-stm32f103/base/chip/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h

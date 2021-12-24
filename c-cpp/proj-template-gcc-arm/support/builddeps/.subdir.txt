@@ -1,0 +1,2 @@
+startup_stm32f103x6.s
+STM32F103C6Tx_FLASH.ld

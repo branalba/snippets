@@ -1,0 +1,2 @@
+clang
+-I./ProjTemplate-GCCx86/app

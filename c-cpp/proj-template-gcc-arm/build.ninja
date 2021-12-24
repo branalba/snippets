@@ -1,0 +1,62 @@
+cc = arm-none-eabi-gcc
+cxx = arm-none-eabi-g++
+as = arm-none-eabi-gcc -x assembler-with-cpp
+build_dir = build
+target = proj-template-gcc-arm
+ccflags = -mcpu=cortex-m3 -mthumb -W -Wall -Wextra -Wshadow -Wdouble-promotion -Wformat=2 -Wundef -g -gdwarf-2 -Og -DUSE_HAL_DRIVER -DSTM32F103x6 -fdata-sections -ffunction-sections
+ldflags = -T./support/builddeps/STM32F103C6Tx_FLASH.ld -mcpu=cortex-m3 -mthumb -lc -lm -lnosys -specs=nano.specs -Wl,--gc-sections -Wl,--print-memory-usage -Wl,-Map=$build_dir/link.map
+cc_includes = -I./ProjTemplate-ARM/base -I./ProjTemplate-ARM/base/chip -I./ProjTemplate-ARM/base/chip/CMSIS/Include -I./ProjTemplate-ARM/base/chip/CMSIS/Device/ST/STM32F1xx/Include -I./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Inc -I./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Inc/Legacy -I./ProjTemplate-ARM/base/os -I./ProjTemplate-ARM/base/os/Source/include -I./ProjTemplate-ARM/base/os/Source/CMSIS_RTOS_V2 -I./ProjTemplate-ARM/base/os/Source/portable/GCC/ARM_CM3 -I./ProjTemplate-ARM/base/debug/RTT -I./ProjTemplate-ARM/app -I./ProjTemplate-ARM/app/tasks
+
+rule cc
+    command = $cc -c $ccflags $cc_includes $in -o $out
+    description = building $out...
+    depfile = $out.d
+    deps = gcc
+
+rule as
+    command = $as -c $ccflags $cc_includes $in -o $out
+    description = building $out...
+    depfile = $out.d
+    deps = gcc
+
+rule link
+    command = $cc $in $ldflags -o $out
+    description = generating executable...
+
+build $build_dir/obj/base.o: cc ./ProjTemplate-ARM/base/base.c
+build $build_dir/obj/stm32f1xx_hal_timebase_tim.o: cc ./ProjTemplate-ARM/base/chip/stm32f1xx_hal_timebase_tim.c
+build $build_dir/obj/stm32f1xx_hal_msp.o: cc ./ProjTemplate-ARM/base/chip/stm32f1xx_hal_msp.c
+build $build_dir/obj/system_stm32f1xx.o: cc ./ProjTemplate-ARM/base/chip/system_stm32f1xx.c
+build $build_dir/obj/stm32f1xx_hal.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c
+build $build_dir/obj/stm32f1xx_hal_rcc.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c
+build $build_dir/obj/stm32f1xx_hal_gpio_ex.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c
+build $build_dir/obj/stm32f1xx_hal_gpio.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c
+build $build_dir/obj/stm32f1xx_hal_flash.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c
+build $build_dir/obj/stm32f1xx_hal_dma.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c
+build $build_dir/obj/stm32f1xx_hal_cortex.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c
+build $build_dir/obj/stm32f1xx_hal_pwr.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c
+build $build_dir/obj/stm32f1xx_hal_flash_ex.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c
+build $build_dir/obj/stm32f1xx_hal_exti.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_exti.c
+build $build_dir/obj/stm32f1xx_hal_tim.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c
+build $build_dir/obj/stm32f1xx_hal_tim_ex.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c
+build $build_dir/obj/stm32f1xx_hal_uart.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c
+build $build_dir/obj/stm32f1xx_hal_i2c.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c
+build $build_dir/obj/stm32f1xx_hal_spi.o: cc ./ProjTemplate-ARM/base/chip/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c
+build $build_dir/obj/list.o: cc ./ProjTemplate-ARM/base/os/Source/list.c
+build $build_dir/obj/croutine.o: cc ./ProjTemplate-ARM/base/os/Source/croutine.c
+build $build_dir/obj/queue.o: cc ./ProjTemplate-ARM/base/os/Source/queue.c
+build $build_dir/obj/tasks.o: cc ./ProjTemplate-ARM/base/os/Source/tasks.c
+build $build_dir/obj/timers.o: cc ./ProjTemplate-ARM/base/os/Source/timers.c
+build $build_dir/obj/stream_buffer.o: cc ./ProjTemplate-ARM/base/os/Source/stream_buffer.c
+build $build_dir/obj/event_groups.o: cc ./ProjTemplate-ARM/base/os/Source/event_groups.c
+build $build_dir/obj/cmsis_os2.o: cc ./ProjTemplate-ARM/base/os/Source/CMSIS_RTOS_V2/cmsis_os2.c
+build $build_dir/obj/port.o: cc ./ProjTemplate-ARM/base/os/Source/portable/GCC/ARM_CM3/port.c
+build $build_dir/obj/heap_4.o: cc ./ProjTemplate-ARM/base/os/Source/portable/MemMang/heap_4.c
+build $build_dir/obj/SEGGER_RTT.o: cc ./ProjTemplate-ARM/base/debug/RTT/SEGGER_RTT.c
+build $build_dir/obj/SEGGER_RTT_printf.o: cc ./ProjTemplate-ARM/base/debug/RTT/SEGGER_RTT_printf.c
+build $build_dir/obj/main.o: cc ./ProjTemplate-ARM/app/main.c
+build $build_dir/obj/stm32f1xx_it.o: cc ./ProjTemplate-ARM/app/stm32f1xx_it.c
+build $build_dir/obj/task_blink.o: cc ./ProjTemplate-ARM/app/tasks/task_blink.c
+build $build_dir/obj/startup_stm32f103x6.o: as ./support/builddeps/startup_stm32f103x6.s
+
+build $build_dir/bin/$target.elf: link $build_dir/obj/base.o $build_dir/obj/stm32f1xx_hal_timebase_tim.o $build_dir/obj/stm32f1xx_hal_msp.o $build_dir/obj/system_stm32f1xx.o $build_dir/obj/stm32f1xx_hal.o $build_dir/obj/stm32f1xx_hal_rcc.o $build_dir/obj/stm32f1xx_hal_gpio_ex.o $build_dir/obj/stm32f1xx_hal_gpio.o $build_dir/obj/stm32f1xx_hal_flash.o $build_dir/obj/stm32f1xx_hal_dma.o $build_dir/obj/stm32f1xx_hal_cortex.o $build_dir/obj/stm32f1xx_hal_pwr.o $build_dir/obj/stm32f1xx_hal_flash_ex.o $build_dir/obj/stm32f1xx_hal_exti.o $build_dir/obj/stm32f1xx_hal_tim.o $build_dir/obj/stm32f1xx_hal_tim_ex.o $build_dir/obj/stm32f1xx_hal_uart.o $build_dir/obj/stm32f1xx_hal_i2c.o $build_dir/obj/stm32f1xx_hal_spi.o $build_dir/obj/list.o $build_dir/obj/croutine.o $build_dir/obj/queue.o $build_dir/obj/tasks.o $build_dir/obj/timers.o $build_dir/obj/stream_buffer.o $build_dir/obj/event_groups.o $build_dir/obj/cmsis_os2.o $build_dir/obj/port.o $build_dir/obj/heap_4.o $build_dir/obj/SEGGER_RTT.o $build_dir/obj/SEGGER_RTT_printf.o $build_dir/obj/main.o $build_dir/obj/stm32f1xx_it.o $build_dir/obj/task_blink.o $build_dir/obj/startup_stm32f103x6.o
