@@ -1,6 +1,6 @@
 /**
  * @file
- * @author Brandon Alba <branalba42@gmail.com>
+ * @author Brandon Alba <brandonealba@protonmail.com>
  *
  * @section LICENSE
  *
